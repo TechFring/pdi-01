@@ -34,42 +34,43 @@ jobs:
 
       - name: Generate build
         run: npm run build:prod
-
-      - name: Upload artifact_dist
-        if: success()
-        uses: actions/upload-artifact@v3
+      
+      - name: Validate coverage
+        uses: 5monkeys/cobertura-action@master
         with:
-          name: artifact_dist
-          path: dist
+          path: coverage/clover.xml
+          minimum_coverage: 80
+
+  #     - name: Upload artifact_dist
+  #       if: success()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: artifact_dist
+  #         path: dist
   
-      - name: Upload artifact_coverage
-        if: success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifact_coverage
-          path: coverage
+  #     - name: Upload artifact_coverage
+  #       if: success()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: artifact_coverage
+  #         path: coverage
 
-  coverage:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifact_coverage
-        if: success()
-        uses: actions/download-artifact@v3
-        with:
-          name: artifact_coverage
-          path: coverage
+  # coverage:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download artifact_coverage
+  #       if: success()
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: artifact_coverage
+  #         path: coverage
 
-#      - name: Validate coverage
-#        uses: 5monkeys/cobertura-action@master
-#        with:
-#          path: coverage/clover.xml
-#          minimum_coverage: 80
-
-      - name: Debug
-        run: |
-            ls
-            ls coverage/
+  #    - name: Validate coverage
+  #      uses: 5monkeys/cobertura-action@master
+  #      with:
+  #        path: coverage/clover.xml
+  #        minimum_coverage: 80
 
 #        uses: devmasx/coverage-check-action@v1.2.0
 #        with:
