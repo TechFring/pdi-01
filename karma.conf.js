@@ -6,9 +6,11 @@ module.exports = function (config) {
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
+      require('karma-coverage-istanbul-reporter'),
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
+    reporters: ['coverage-istanbul'],
     client: {
       jasmine: {},
       clearContext: false
@@ -16,24 +18,11 @@ module.exports = function (config) {
     jasmineHtmlReporter: {
       suppressAll: true
     },
-    coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/pdi-01'),
-      subdir: '.',
-      reporters: [
-        // { type: 'html' },
-        // { type: 'text-summary' },
-        { type: 'lcov' },
-      ],
-      check: {
-        global: {
-          statements: 80,
-          branches: 80,
-          functions: 80,
-          lines: 80
-        }
-      }
+    coverageIstanbulReporter: {
+      dir: require('path').join(__dirname, './coverage'),
+      reports: ['text-summary', 'html', 'clover'],
+      fixWebpackSourcePaths: true
     },
-    reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
