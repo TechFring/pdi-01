@@ -29,10 +29,10 @@ jobs:
 #         env:
 #           SECRET_API_KEY: ${{ secrets.API_KEY}}
 
-      - name: Run tests
+      - name: Generate coverage report
         run: npm run test:prod
 
-      - name: Build
+      - name: Generate build
         run: npm run build:prod
 
       - name: Upload artifact_dist
@@ -53,7 +53,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifacts created at previous job
+      - name: Download artifact_coverage
         if: success()
         uses: actions/download-artifact@v3
         with:
@@ -61,12 +61,17 @@ jobs:
           path: coverage
 
       - name: Validate coverage
-        uses: devmasx/coverage-check-action@v1.2.0
+        uses: 5monkeys/cobertura-action@master
         with:
-          type: lcov
-          result_path: coverage/pdi-01/lcov.info
-          min_coverage: 80
-          token: ${{ github.token }}
+          path: coverage/clover.xml
+          minimum_coverage: 80
+
+#        uses: devmasx/coverage-check-action@v1.2.0
+#        with:
+#          type: lcov
+#          result_path: coverage/pdi-01/lcov.info
+#          min_coverage: 80
+#          token: ${{ github.token }}
 
 #      - name: Lint
 #        run: npm run lint
