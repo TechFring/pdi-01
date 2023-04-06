@@ -62,7 +62,7 @@ jobs:
 
       - name: Validate coverage
         uses: 5monkeys/cobertura-action@master
-          with:
+        with:
           path: coverage/cobertura-coverage.xml
           minimum_coverage: 80
 
