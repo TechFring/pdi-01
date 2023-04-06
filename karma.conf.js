@@ -20,7 +20,7 @@ module.exports = function (config) {
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage'),
-      reports: ['text-summary', 'html', 'clover'],
+      reports: ['text-summary', 'html', 'cobertura'],
       fixWebpackSourcePaths: true
     },
     port: 9876,
