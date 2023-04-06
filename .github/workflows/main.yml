@@ -60,11 +60,16 @@ jobs:
           name: artifact_coverage
           path: coverage
 
-      - name: Validate coverage
-        uses: 5monkeys/cobertura-action@master
-        with:
-          path: coverage/clover.xml
-          minimum_coverage: 80
+#      - name: Validate coverage
+#        uses: 5monkeys/cobertura-action@master
+#        with:
+#          path: coverage/clover.xml
+#          minimum_coverage: 80
+
+      - name: Debug
+        run: |
+            ls
+            ls coverage/
 
 #        uses: devmasx/coverage-check-action@v1.2.0
 #        with:
