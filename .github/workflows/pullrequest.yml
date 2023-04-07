@@ -8,7 +8,7 @@ on:
       - main
 
 jobs:
-  coverage:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,8 +26,26 @@ jobs:
       - name: Generate coverage report
         run: npm run test:prod
       
+      - name: Upload artifact_coverage
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact_coverage
+          path: coverage
+    
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact_coverage
+        if: success()
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact_coverage
+          path: coverage
+
       - name: Validate coverage
         uses: 5monkeys/cobertura-action@master
         with:
           path: coverage/cobertura-coverage.xml
           minimum_coverage: 80
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
