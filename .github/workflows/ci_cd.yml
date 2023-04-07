@@ -43,7 +43,7 @@ jobs:
           name: artifact_dist
           path: dist
 
-  deploy:
+  push:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -60,13 +60,31 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Build and push docker image
         uses: docker/build-push-action@v3.1.1
         with:
           push: true
           tags: |
             techfring/pdi-01:${{ github.run_number }}
             techfring/pdi-01:latest
+
+  deploy:
+    needs:
+      - build
+      - push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install vercel cli
+        run: npm install --global vercel@latest
+      
+      - name: Pull vercel environment information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build project artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy project artifacts to vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
 #       - name: Deploy to GitHub Pages
 #         uses: crazy-max/ghaction-github-pages@v3
