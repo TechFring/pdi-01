@@ -1,4 +1,4 @@
-name: Pull Request
+name: Pull Request Checks
 
 on:
   pull_request:
@@ -14,26 +14,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       - name: Set up node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
-      - name: Generate coverage report
+
+      - name: Run tests
         run: npm run test:prod
-      
+
       - name: Upload artifact_coverage
         if: success()
         uses: actions/upload-artifact@v3
         with:
           name: artifact_coverage
           path: coverage
-    
+
   coverage:
     needs: build
     runs-on: ubuntu-latest

@@ -1,4 +1,4 @@
-name: CI / CD for Angular
+name: CI/CD
 
 on:
   push:
@@ -30,11 +30,11 @@ jobs:
 #         env:
 #           SECRET_API_KEY: ${{ secrets.API_KEY}}
 
-#       - name: Generate coverage report
-#         run: npm run test:prod
-
       - name: Generate build
         run: npm run build:prod
+
+      - name: Run tests
+        run: npm run test:prod
 
       - name: Upload artifact_dist
         if: success()
@@ -42,40 +42,30 @@ jobs:
         with:
           name: artifact_dist
           path: dist
-  
-#       - name: Upload artifact_coverage
-#         if: success()
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: artifact_coverage
-#           path: coverage
 
-#   coverage:
-#     needs: build
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Download artifact_coverage
-#         if: success()
-#         uses: actions/download-artifact@v3
-#         with:
-#           name: artifact_coverage
-#           path: coverage
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact_dist
+        if: success()
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact_dist
+          path: dist
 
-#       - name: Validate coverage
-#         uses: 5monkeys/cobertura-action@master
-#         with:
-#           path: coverage/cobertura-coverage.xml
-#           minimum_coverage: 80
+      - name: Docker login
+        uses: docker/login-action@v2.1.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-#        uses: devmasx/coverage-check-action@v1.2.0
-#        with:
-#          type: lcov
-#          result_path: coverage/pdi-01/lcov.info
-#          min_coverage: 80
-#          token: ${{ github.token }}
-
-#      - name: Lint
-#        run: npm run lint
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3.1.1
+        with:
+          push: true
+          tags: |
+            techfring/pdi-01:${{ github.run_number }}
+            techfring/pdi-01:latest
 
 #       - name: Deploy to GitHub Pages
 #         uses: crazy-max/ghaction-github-pages@v3
