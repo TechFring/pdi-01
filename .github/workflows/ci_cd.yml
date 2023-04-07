@@ -47,13 +47,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifact_dist
-        if: success()
-        uses: actions/download-artifact@v3
-        with:
-          name: artifact_dist
-          path: dist
-
       - name: Docker login
         uses: docker/login-action@v2.1.0
         with:
@@ -74,9 +67,16 @@ jobs:
       - push
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifact_dist
+        if: success()
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact_dist
+          path: dist
+
       - name: Install vercel cli
         run: npm install --global vercel@latest
-      
+
       - name: Pull vercel environment information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
@@ -86,10 +86,3 @@ jobs:
       - name: Deploy project artifacts to vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-#       - name: Deploy to GitHub Pages
-#         uses: crazy-max/ghaction-github-pages@v3
-#         with:
-#           target_branch: gh-pages
-#           build_dir: dist/weather-app
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
