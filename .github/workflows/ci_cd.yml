@@ -43,6 +43,30 @@ jobs:
           name: artifact_dist
           path: dist
 
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact_dist
+        if: success()
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact_dist
+          path: dist
+
+      - name: Docker login
+        uses: docker/login-action@v2.1.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3.1.1
+        with:
+          push: true
+          tags: |
+            techfring/pdi-01:${{ github.run_number }}
+            techfring/pdi-01:latest
+
 #       - name: Deploy to GitHub Pages
 #         uses: crazy-max/ghaction-github-pages@v3
 #         with:
