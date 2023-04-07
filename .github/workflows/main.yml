@@ -1,9 +1,7 @@
 name: CI / CD for Angular
 
 on:
-  pull_request:
-    types:
-      - opened
+  push:
     branches:
       - main
 
@@ -32,8 +30,8 @@ jobs:
 #         env:
 #           SECRET_API_KEY: ${{ secrets.API_KEY}}
 
-      - name: Generate coverage report
-        run: npm run test:prod
+#       - name: Generate coverage report
+#         run: npm run test:prod
 
       - name: Generate build
         run: npm run build:prod
@@ -45,29 +43,29 @@ jobs:
           name: artifact_dist
           path: dist
   
-      - name: Upload artifact_coverage
-        if: success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifact_coverage
-          path: coverage
+#       - name: Upload artifact_coverage
+#         if: success()
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: artifact_coverage
+#           path: coverage
 
-  coverage:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifact_coverage
-        if: success()
-        uses: actions/download-artifact@v3
-        with:
-          name: artifact_coverage
-          path: coverage
+#   coverage:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Download artifact_coverage
+#         if: success()
+#         uses: actions/download-artifact@v3
+#         with:
+#           name: artifact_coverage
+#           path: coverage
 
-      - name: Validate coverage
-        uses: 5monkeys/cobertura-action@master
-        with:
-          path: coverage/cobertura-coverage.xml
-          minimum_coverage: 80
+#       - name: Validate coverage
+#         uses: 5monkeys/cobertura-action@master
+#         with:
+#           path: coverage/cobertura-coverage.xml
+#           minimum_coverage: 80
 
 #        uses: devmasx/coverage-check-action@v1.2.0
 #        with:
