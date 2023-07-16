@@ -1,4 +1,4 @@
-import { ISearchLocationResponse } from "@shared/contracts/response/search-location.response";
+import { ISearchLocationResponse } from '@shared/contracts/response/search-location.response';
 
 export class SearchLocation {
   name: string;
