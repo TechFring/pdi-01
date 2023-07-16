@@ -37,7 +37,7 @@ const targetPath = isProduction
 
 const environmentFileContent = `export const environment = {
   production: ${isProduction},
-  weatherApiUrl: 'https://api.weatherapi.com/v1/current.json',
+  weatherApiUrl: 'https://api.weatherapi.com/v1/',
   weatherApiKey: '${process.env.WEATHER_API_KEY}',
 };`;
 
