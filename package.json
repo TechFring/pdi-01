@@ -9,7 +9,7 @@
     "build:prod": "npm run config -- --environment=prod && ng build --deploy-url /pdi-01/",
     "watch": "npm run config -- --environment=dev && ng build --watch --configuration development",
     "test": "npm run config -- --environment=dev && ng test",
-    "test:prod": "npm run config -- --environment=prod && ng test --browsers=ChromeHeadless --watch=false --code-coverage"
+    "test:prod": "npm run config -- --environment=dev && ng test --browsers=ChromeHeadless --watch=false --code-coverage"
   },
   "private": true,
   "dependencies": {
